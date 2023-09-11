@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ToDoWeb.Models.ToDo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DueDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCompleted)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+                <td style="max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DueDate)
+            </td>
+                <td>
+                    <form asp-action="ChangeStatus" method="post">
+                        <input type="hidden" name="taskId" value="@item.Id" />
+                        <input type="checkbox" name="isCompleted" @(item.IsCompleted ? "checked" : "") onchange="submitFormOnCheckboxChange(this)" />
+                    </form>
+                </td>
+            <td>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                <a class="btn btn-secondary" asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+<script>
+    function submitFormOnCheckboxChange(checkbox)
+    {
+        checkbox.form.submit();
+    }
+</script>
